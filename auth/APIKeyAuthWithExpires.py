@@ -1,6 +1,6 @@
 from requests.auth import AuthBase
 import time
-from market_maker.auth.APIKeyAuth import generate_signature
+from APIKeyAuth import generate_signature
 
 class APIKeyAuthWithExpires(AuthBase):
 
@@ -19,9 +19,11 @@ class APIKeyAuthWithExpires(AuthBase):
         For more details, see https://www.bitmex.com/app/apiKeys
         """
         # modify and return the request
-        expires = int(round(time.time()) + 5)  # 5s grace period in case of clock skew
+        # 5s grace period in case of clock skew
+        expires = int(round(time.time()) + 5)
         r.headers['api-expires'] = str(expires)
         r.headers['api-key'] = self.apiKey
-        r.headers['api-signature'] = generate_signature(self.apiSecret, r.method, r.url, expires, r.body or '')
+        r.headers['api-signature'] = generate_signature(
+            self.apiSecret, r.method, r.url, expires, r.body or '')
 
         return r
