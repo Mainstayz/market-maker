@@ -12,7 +12,6 @@ import decimal
 import logging
 
 from settings import settings
-
 from auth.APIKeyAuth import generate_expires, generate_signature
 from utils.log import setup_custom_logger
 from utils.math import toNearest
@@ -191,11 +190,13 @@ class BitMEXWebsocket():
         # To auth to the WS using an API key, we generate a signature of a nonce and
         # the WS API endpoint.
         nonce = generate_expires()
-        return [
+        data = [
             "api-expires: " + str(nonce),
             "api-signature: " + generate_signature(settings.API_SECRET, 'GET', '/realtime', nonce, ''),
             "api-key:" + settings.API_KEY
         ]
+        print(data)
+        return data
 
     def __wait_for_account(self):
         '''On subscribe, this data will come down. Wait for it.'''
@@ -335,7 +336,7 @@ if __name__ == "__main__":
     logger.addHandler(ch)
     ws = BitMEXWebsocket()
     ws.logger = logger
-    ws.connect("https://testnet.bitmex.com/api/v1")
+    ws.connect("https://wwww.bitmex.com/api/v1")
     while(ws.ws.sock.connected):
         sleep(1)
 
