@@ -21,14 +21,11 @@ class APIKeyAuthOkexV3(AuthBase):
     def __call__(self, r):
         """Called when forming a request - generates api key headers."""
         # modify and return the request
-
-        milli = generate_nonce_milli() + 2000
-
-        epoch = generate_epoch_milli(milli)
-
-        iso = datetime.datetime.fromtimestamp(epoch/1000).isoformat()
-
-        r.headers['OK-ACCESS-TIMESTAMP'] = self.epoch
+        # time = generate_nonce_milli()
+        # dt = datetime.datetime.utcfromtimestamp(time / 1000.0)
+        # iSO8601 = dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        time = float(self.epoch) + 28800
+        r.headers['OK-ACCESS-TIMESTAMP'] = str(time)
         r.headers['OK-ACCESS-KEY'] = self.apiKey
         r.headers['OK-ACCESS-SIGN'] = generate_signature(self.iso, r.method, r.url, r.body or '', self.apiSecret)
         r.headers['OK-ACCESS-PASSPHRASE'] = self.passPhrase
@@ -36,7 +33,7 @@ class APIKeyAuthOkexV3(AuthBase):
 
 
 def generate_nonce_milli():
-    return int(round((time.time() + 3600 )* 1000))
+    return int(round(time.time() * 1000))
 
 
 def generate_epoch_milli(m):
@@ -56,9 +53,7 @@ def generate_signature(iso, method, url, body, secret):
     message = iso + method + path + body
     print(message)
     signature = hmac.new(bytes(secret, 'utf8'), bytes(message, 'utf8'), digestmod=hashlib.sha256).hexdigest()
-
     encodestr = base64.b64encode(bytes(signature, 'utf8'))
-
     return str(encodestr, 'utf8')
 
 
