@@ -21,6 +21,9 @@ from future.standard_library import hooks
 with hooks():  # Python 2/3 compat
     from urllib.parse import urlparse, urlunparse
 
+def _gError(ws,error):
+    print('xxxxxx %s' % error)
+    pass
 
 # print(type(settings.ws_proxies))
 # exit()
@@ -165,13 +168,14 @@ class BitMEXWebsocket():
                                          )
 
         setup_custom_logger('websocket', log_level=settings.LOG_LEVEL)
+        print(settings.ws_proxies)
         self.wst = threading.Thread(target=lambda: self.ws.run_forever(sslopt=sslopt_ca_certs,http_proxy_host=settings.ws_proxies['host'],http_proxy_port=settings.ws_proxies['port']))
         self.wst.daemon = True
         self.wst.start()
         self.logger.info("Started thread")
 
         # Wait for connect before continuing
-        conn_timeout = 5
+        conn_timeout = 10
         while (not self.ws.sock or not self.ws.sock.connected) and conn_timeout and not self._error:
             sleep(1)
             conn_timeout -= 1
@@ -305,8 +309,7 @@ class BitMEXWebsocket():
         self.logger.info('Websocket Closed')
         self.exit()
 
-    def __on_error(self, ws, error):
-        print('xxxxx %s' % error)
+    def __on_error(self, error):
         if not self.exited:
             self.error(error)
 
