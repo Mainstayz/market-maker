@@ -1,7 +1,8 @@
 import sys
-from os import path
-sys.path.append(path.dirname(path.dirname(__file__)))
-
+import os
+root_path = os.path.abspath(os.path.join(os.getcwd(), ".."))
+sys.path.append(root_path)
+print(sys.path)
 import websocket
 import threading
 import traceback
