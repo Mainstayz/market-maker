@@ -306,6 +306,7 @@ class BitMEXWebsocket():
         self.exit()
 
     def __on_error(self, ws, error):
+        print('xxxxx %s' % error)
         if not self.exited:
             self.error(error)
 
@@ -337,7 +338,7 @@ if __name__ == "__main__":
     logger.addHandler(ch)
     ws = BitMEXWebsocket()
     ws.logger = logger
-    ws.connect("https://wwww.bitmex.com/api/v1")
+    ws.connect("https://testnet.bitmex.com/api/v1")
     while(ws.ws.sock.connected):
         sleep(1)
 
