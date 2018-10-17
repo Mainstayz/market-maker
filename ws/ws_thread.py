@@ -2,7 +2,6 @@ import sys
 import os
 root_path = os.path.abspath(os.path.join(os.getcwd(), ".."))
 sys.path.append(root_path)
-print(sys.path)
 import websocket
 import threading
 import traceback
@@ -21,12 +20,6 @@ from future.standard_library import hooks
 with hooks():  # Python 2/3 compat
     from urllib.parse import urlparse, urlunparse
 
-def _gError(ws,error):
-    print('xxxxxx %s' % error)
-    pass
-
-# print(type(settings.ws_proxies))
-# exit()
 # Connects to BitMEX websocket for streaming realtime data.
 # The Marketmaker still interacts with this as if it were a REST Endpoint, but now it can get
 # much more realtime data without heavily polling the API.
@@ -47,7 +40,7 @@ class BitMEXWebsocket():
     def __del__(self):
         self.exit()
 
-    def connect(self, endpoint="", symbol="XBTN15", shouldAuth=True):
+    def connect(self, endpoint="", symbol="XBTUSD", shouldAuth=True):
         '''Connect to the websocket and initialize data stores.'''
 
         self.logger.debug("Connecting WebSocket.")
@@ -331,13 +324,17 @@ def findItemByKeys(keys, table, matchData):
 
 if __name__ == "__main__":
     # create console handler and set level to debug
+    # 获取logging
     logger = logging.getLogger()
+    # 设置打印级别
     logger.setLevel(logging.DEBUG)
+    # 获取流句柄
     ch = logging.StreamHandler()
     # create formatter
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     # add formatter to ch
     ch.setFormatter(formatter)
+    # 添加流句柄
     logger.addHandler(ch)
     ws = BitMEXWebsocket()
     ws.logger = logger
