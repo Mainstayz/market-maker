@@ -22,8 +22,8 @@ ws_proxies = {
 BASE_URL = "https://www.bitmex.com/api/v1/" # Once you're ready, uncomment this.
 
 # The BitMEX API requires permanent API keys. Go to https://testnet.bitmex.com/app/apiKeys to fill these out.
-API_KEY = "7d1u9ttNtNZgnxSc60Usg3bG"
-API_SECRET = "UVxPTX3hluddC3ElYLAlktlk7_vhaZMmtPXjRCiNqTFZMR7x"
+API_KEY = ""
+API_SECRET = ""
 
 
 ########################################################################################################################
